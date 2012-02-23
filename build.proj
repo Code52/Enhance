@@ -8,10 +8,10 @@
   </Target>
 
   
-  <Target Name="AppHarbor" DependsOnTargets="Compile">
+<!--  <Target Name="AppHarbor" DependsOnTargets="Compile">
   	<Message Text="===========Testing AppHarbor Build===========" Importance="High" />
 
     <MSBuild Projects="./src/AppHarbor.sln" Properties="Configuration=$(Configuration)" />
-  </Target>
+  </Target>-->
 
 </Project>
