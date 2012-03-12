@@ -1,17 +1,27 @@
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Compile" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   
   <UsingTask AssemblyFile=".\tools\xunit\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
 
+  <PropertyGroup>
+  	<OutputPath>.\src\Enhance\bin\$(Configuration)</OutputPath>
+  </PropertyGroup>
+
   <Target Name="Compile">
-    <Message Text=" ===========Building Website===========" Importance="High" />
-    <MSBuild Projects="./src/Ideastrike.sln" Properties="Configuration=$(Configuration)" />
+    <Message Text=" ===========Compiling code===========" Importance="High" />
+    <MSBuild Projects="./src/Enhance.sln" Properties="Configuration=$(Configuration)" />
   </Target>
 
-  
-<!--  <Target Name="AppHarbor" DependsOnTargets="Compile">
-  	<Message Text="===========Testing AppHarbor Build===========" Importance="High" />
+  <!--
+  <Target Name="Test" DependsOnTargets="Compile">
 
-    <MSBuild Projects="./src/AppHarbor.sln" Properties="Configuration=$(Configuration)" />
-  </Target>-->
+  	<Message Text="===========Tests===========" Importance="High" />
+
+  	<ItemGroup>
+  		<TestFiles Include=".\**\bin\$(Configuration)\*Tests.dll" />
+	</ItemGroup>
+
+    <xunit Assembly="@(TestFiles)" />
+  </Target>
+-->
 
 </Project>
