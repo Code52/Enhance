@@ -36,6 +36,11 @@ namespace Enhance.Logic.Services
 
         public Image Scan(DeviceInfo device)
         {
+            return Scan(device, PageSizes.A4);
+        }
+
+        public Image Scan(DeviceInfo device, PageSize pageSize)
+        {
             if (device == null)
                 throw new ArgumentException("Device must be specified");
 
@@ -43,6 +48,9 @@ namespace Enhance.Logic.Services
 
             var wiaCommonDialog = new WPFCommonDialog();
             var item = scanner.Items[1];
+            
+            SetupPageSize(item, pageSize, 100);
+
             var image = (ImageFile)wiaCommonDialog.ShowTransfer(item, wiaFormatBMP, false);
 
             string fileName = Path.GetTempFileName();
@@ -52,6 +60,16 @@ namespace Enhance.Logic.Services
 
             // add file to output list
             return Image.FromFile(fileName);
+        }
+
+        private void SetupPageSize(WIA.Item item, PageSize pageSize, int DPI)
+        {
+            if (item == null) return;
+
+            item.Properties["Horizontal Resolution"].set_Value(DPI);
+            item.Properties["Vertical Resolution"].set_Value(DPI);
+            item.Properties["Horizontal Extent"].set_Value(DPI * pageSize.Width);//pageSize.Height);
+            item.Properties["Vertical Extent"].set_Value(DPI * pageSize.Height);//pageSize.Width);
         }
     }
 }

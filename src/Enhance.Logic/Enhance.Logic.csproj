@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dialogs\WPFCommonDialog.cs" />
+    <Compile Include="Models\PageSizes.cs" />
     <Compile Include="Models\Scanner.cs" />
     <Compile Include="Services\Interfaces\IScannerService.cs" />
     <Compile Include="Services\ScannerService.cs" />
