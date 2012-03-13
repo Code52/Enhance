@@ -1,3 +1,4 @@
-﻿namespace Enhance.ViewModels.Interfaces {
-    public interface IShell {}
+﻿namespace Enhance.ViewModels.Interfaces
+{
+    public interface IShell { }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using Enhance.Logic.Dialogs;
 using Enhance.Logic.Models;
 using Enhance.Logic.Services.Interfaces;
@@ -25,7 +23,7 @@ namespace Enhance.Logic.Services
                 GetDevices().Where(s => s.Type == WiaDeviceType.ScannerDeviceType).Select(
                     s => new Scanner
                              {
-                                 Name = ((dynamic)(s.Properties["Description"])).Value, 
+                                 Name = ((dynamic)(s.Properties["Description"])).Value,
                                  Device = s
                              });
         }
@@ -38,7 +36,8 @@ namespace Enhance.Logic.Services
 
         public Image Scan(DeviceInfo device)
         {
-            if (device == null) throw new ArgumentException("Device must be specified");
+            if (device == null)
+                throw new ArgumentException("Device must be specified");
 
             var scanner = device.Connect();
 

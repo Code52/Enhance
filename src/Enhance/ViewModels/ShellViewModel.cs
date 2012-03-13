@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
 using Enhance.Logic.Models;
 using Enhance.Logic.Services.Interfaces;
 using Enhance.ViewModels.Interfaces;
-using WIA;
 
-namespace Enhance.ViewModels {
+namespace Enhance.ViewModels
+{
 
     public class ShellViewModel : Screen, IShell
     {
@@ -55,22 +53,22 @@ namespace Enhance.ViewModels {
 
                 IsProgressVisible = Visibility.Hidden;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
 
-            
+
         }
 
         private BitmapImage ConvertImageToBitmapImage(Image bitmap)
         {
             var memoryStream = new MemoryStream();
-            
+
             bitmap.Save(memoryStream, ImageFormat.Bmp);
 
             var bitmapImage = new BitmapImage();
-            
+
             bitmapImage.BeginInit();
             bitmapImage.StreamSource = new MemoryStream(memoryStream.ToArray());
             bitmapImage.EndInit();
