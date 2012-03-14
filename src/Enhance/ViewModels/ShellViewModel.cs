@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
@@ -48,7 +49,7 @@ namespace Enhance.ViewModels
                 IsProgressVisible = Visibility.Visible;
 
                 var image = scannerService.Scan(SelectedScanner.Device);
-
+              
                 Image = ConvertImageToBitmapImage(image);
 
                 IsProgressVisible = Visibility.Hidden;
@@ -57,8 +58,6 @@ namespace Enhance.ViewModels
             {
                 MessageBox.Show(ex.Message);
             }
-
-
         }
 
         private BitmapImage ConvertImageToBitmapImage(Image bitmap)
