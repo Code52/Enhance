@@ -36,10 +36,10 @@ namespace Enhance.Logic.Services
 
         public Image Scan(DeviceInfo device)
         {
-            return Scan(device, PageSizes.A4);
+            return Scan(device, PageSizes.A4, ColorDepths.Color, 100);
         }
 
-        public Image Scan(DeviceInfo device, PageSize pageSize)
+        public Image Scan(DeviceInfo device, PageSize pageSize, ColorDepth colorDepth, int dotsPerInch)
         {
             if (device == null)
                 throw new ArgumentException("Device must be specified");
@@ -49,7 +49,7 @@ namespace Enhance.Logic.Services
             var wiaCommonDialog = new WPFCommonDialog();
             var item = scanner.Items[1];
             
-            SetupPageSize(item, pageSize, 100);
+            SetupPageSize(item, pageSize, colorDepth.Value, dotsPerInch);
 
             var image = (ImageFile)wiaCommonDialog.ShowTransfer(item, wiaFormatBMP, false);
 
@@ -62,14 +62,15 @@ namespace Enhance.Logic.Services
             return Image.FromFile(fileName);
         }
 
-        private void SetupPageSize(WIA.Item item, PageSize pageSize, int DPI)
+        private void SetupPageSize(WIA.Item item, PageSize pageSize, int colorDepth, int dotsPerInch)
         {
             if (item == null) return;
 
-            item.Properties["Horizontal Resolution"].set_Value(DPI);
-            item.Properties["Vertical Resolution"].set_Value(DPI);
-            item.Properties["Horizontal Extent"].set_Value(DPI * pageSize.Width);//pageSize.Height);
-            item.Properties["Vertical Extent"].set_Value(DPI * pageSize.Height);//pageSize.Width);
+            item.Properties["Horizontal Resolution"].set_Value(dotsPerInch);
+            item.Properties["Vertical Resolution"].set_Value(dotsPerInch);
+            item.Properties["Horizontal Extent"].set_Value(dotsPerInch * pageSize.Width);//pageSize.Height);
+            item.Properties["Vertical Extent"].set_Value(dotsPerInch * pageSize.Height);//pageSize.Width);
+            item.Properties["Current Intent"].set_Value(colorDepth);
         }
     }
 }
