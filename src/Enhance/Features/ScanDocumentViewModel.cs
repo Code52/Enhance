@@ -4,26 +4,26 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using Enhance.Logic.Models;
 using Enhance.Logic.Services.Interfaces;
-using Enhance.ViewModels.Interfaces;
+using Phoenix;
+using Phoenix.Commands;
 
-namespace Enhance.ViewModels
+namespace Enhance.Features
 {
-
-    public class ShellViewModel : Screen, IShell
+    public class ScanDocumentViewModel : ViewModelBase
     {
-        IWindowManager wm { get; set; }
-        IScannerService scannerService { get; set; }
+        readonly IScannerService scannerService;
 
-        public ShellViewModel(IWindowManager wm, IScannerService scannerService)
+        public ScanDocumentViewModel(IScannerService scannerService)
         {
             this.scannerService = scannerService;
             IsProgressVisible = Visibility.Hidden;
 
             FetchScanners();
+            BackHomeCommand = new DelegateCommand(NavigateBack);
         }
 
         public ObservableCollection<Scanner> Scanners { get; set; }
@@ -33,6 +33,8 @@ namespace Enhance.ViewModels
         public BitmapImage Image { get; set; }
 
         public Visibility IsProgressVisible { get; set; }
+
+        public ICommand BackHomeCommand { get; private set; }
 
         private void FetchScanners()
         {
@@ -57,8 +59,6 @@ namespace Enhance.ViewModels
             {
                 MessageBox.Show(ex.Message);
             }
-
-
         }
 
         private BitmapImage ConvertImageToBitmapImage(Image bitmap)

@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="Enhance.Features.ScanDocument"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Transitions="clr-namespace:Phoenix.Frames.Transitions;assembly=Phoenix"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:Features="clr-namespace:Enhance.Features"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Features:ScanDocumentViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseDark.xaml" />
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Transitions:TransitionService.NavigateForwardTransition>
+        <Transitions:SlideTransition Direction="Forward" />
+    </Transitions:TransitionService.NavigateForwardTransition>
+    <Transitions:TransitionService.NavigateBackTransition>
+        <Transitions:SlideTransition Direction="Back" />
+    </Transitions:TransitionService.NavigateBackTransition>
+    
+    <Grid Margin="10, 30">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Button HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Width="50"
+                Height="50"
+                Margin="-10 0 0 0"
+                AutomationProperties.AutomationId="BackHomeButton"
+                Command="{Binding BackHomeCommand}"
+                Foreground="Black">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}"
+                       BasedOn="{StaticResource MetroCircleButtonStyle}">
+                </Style>
+            </Button.Style>
+            <Grid>
+                <Controls:MetroImage Source="{StaticResource appbar_home}"
+                                     Foreground="Black"
+                                     Width="30"
+                                     Height="30" />
+            </Grid>
+        </Button>
+
+        <Grid Grid.Column="0"
+              Margin="0, 0, 10, 0"
+              Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ListBox Grid.Row="0"
+                     x:Name="Scanners"
+                     DisplayMemberPath="Name"
+                     Margin="0, 0, 0, 5" />
+            <Button Grid.Row="1"
+                    x:Name="Scan"
+                    Content="Scan"
+                    Width="60" />
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Image Grid.Row="0"
+                   Source="{Binding Image}"
+                   Stretch="Uniform" />
+            <ProgressBar Grid.Row="1"
+                         x:Name="Progress"
+                         Visibility="{Binding IsProgressVisible}"
+                         IsIndeterminate="True"
+                         IsEnabled="True"
+                         Width="300"
+                         HorizontalAlignment="Center" />
+        </Grid>
+    </Grid>
+</UserControl>

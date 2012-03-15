@@ -1,15 +1,28 @@
 ﻿using System.Windows;
+using Autofac;
+using Enhance.Logic.Services;
+using Phoenix;
+using Phoenix.Frames;
+using Phoenix.Extensions.Autofac;
 
 namespace Enhance
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public partial class App
     {
-        public App()
+        protected override void ConfigurePhoenixHostBuilder(IPhoenixHostBuilder hostBuilder)
         {
-            InitializeComponent();
+            hostBuilder.SetNavigationFrameFactory(() => new TransitionNavigationFrame());
+        }
+
+        protected override void ConfigureContainer(ContainerBuilder containerBuilder)
+        {
+            GetType().Assembly.RegisterControllers(containerBuilder);
+            containerBuilder.RegisterType<ScannerService>().AsImplementedInterfaces();
+        }
+
+        protected override Window CreateShell()
+        {
+            return new Shell();
         }
     }
 }
