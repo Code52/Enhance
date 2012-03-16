@@ -36,10 +36,10 @@ namespace Enhance.Logic.Services
 
         public Image Scan(DeviceInfo device)
         {
-            return Scan(device, PageSizes.A4, ColorDepths.Color, Resolutions.R96);
+            return Scan(device, PageSizes.A5, ColorDepths.Color, Resolutions.R72, Orientations.Landscape);
         }
 
-        public Image Scan(DeviceInfo device, PageSize pageSize, ColorDepth colorDepth, Resolution resolution)
+        public Image Scan(DeviceInfo device, PageSize pageSize, ColorDepth colorDepth, Resolution resolution, Orientation orientation)
         {
             if (device == null)
                 throw new ArgumentException("Device must be specified");
@@ -49,7 +49,7 @@ namespace Enhance.Logic.Services
             var wiaCommonDialog = new WPFCommonDialog();
             var item = scanner.Items[1];
             
-            SetupPageSize(item, pageSize, colorDepth.Value, colorDepth.BitsPerPixel, resolution.Value);
+            SetupPageSize(item, pageSize, colorDepth.Value, colorDepth.BitsPerPixel, resolution.Value, orientation.Direction);
 
             var image = (ImageFile)wiaCommonDialog.ShowTransfer(item, wiaFormatBMP, false);
 
@@ -62,14 +62,25 @@ namespace Enhance.Logic.Services
             return Image.FromFile(fileName);
         }
 
-        private void SetupPageSize(WIA.Item item, PageSize pageSize, int colorDepth, int bpp, int dotsPerInch)
+        private void SetupPageSize(WIA.Item item, PageSize pageSize, int colorDepth, int bpp, int dotsPerInch, int rotation)
         {
             if (item == null) return;
 
+           // item.Properties["Rotation"].set_Value(rotation);
+
             item.Properties["Horizontal Resolution"].set_Value(dotsPerInch);
             item.Properties["Vertical Resolution"].set_Value(dotsPerInch);
-            item.Properties["Horizontal Extent"].set_Value(dotsPerInch * pageSize.Width);//pageSize.Height);
-            item.Properties["Vertical Extent"].set_Value(dotsPerInch * pageSize.Height);//pageSize.Width);
+
+            if (rotation == 0)
+            {
+                item.Properties["Horizontal Extent"].set_Value(dotsPerInch * pageSize.Width);
+                item.Properties["Vertical Extent"].set_Value(dotsPerInch * pageSize.Height);
+            }
+            else
+            {
+                item.Properties["Horizontal Extent"].set_Value(dotsPerInch * pageSize.Height);
+                item.Properties["Vertical Extent"].set_Value(dotsPerInch * pageSize.Width);
+            }
             item.Properties["Current Intent"].set_Value(colorDepth);
             item.Properties["Bits Per Pixel"].set_Value(bpp);
         }

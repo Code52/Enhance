@@ -11,6 +11,6 @@ namespace Enhance.Logic.Services.Interfaces
         IEnumerable<Scanner> GetScanners();
 
         Image Scan(DeviceInfo device);
-        Image Scan(DeviceInfo device, PageSize pageSize, ColorDepth colorDepth, Resolution resolution);
+        Image Scan(DeviceInfo device, PageSize pageSize, ColorDepth colorDepth, Resolution resolution, Orientation orientation);
     }
 }
