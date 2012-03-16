@@ -11,7 +11,7 @@ namespace Enhance
     {
         protected override void ConfigurePhoenixHostBuilder(IPhoenixHostBuilder hostBuilder)
         {
-            hostBuilder.SetNavigationFrameFactory(() => new TransitionNavigationFrame());
+            hostBuilder.SetNavigationFrameFactory(() => new TransitionNavigationFrame { Background = null});
         }
 
         protected override void ConfigureContainer(ContainerBuilder containerBuilder)

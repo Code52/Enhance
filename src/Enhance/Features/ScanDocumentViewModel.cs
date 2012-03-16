@@ -24,6 +24,7 @@ namespace Enhance.Features
 
             FetchScanners();
             BackHomeCommand = new DelegateCommand(NavigateBack);
+            ScanCommand = new DelegateCommand(Scan);
         }
 
         public ObservableCollection<Scanner> Scanners { get; set; }
@@ -35,6 +36,8 @@ namespace Enhance.Features
         public Visibility IsProgressVisible { get; set; }
 
         public ICommand BackHomeCommand { get; private set; }
+
+        public ICommand ScanCommand { get; private set; }
 
         private void FetchScanners()
         {
