@@ -9,6 +9,11 @@ namespace Enhance.Logic.Models
     {
         public static Orientation Portrait = new Orientation("Portrait", 0);
         public static Orientation Landscape = new Orientation("Landscape", 1);
+
+        public static List<Orientation> List
+        {
+            get { return new List<Orientation> { Portrait, Landscape };}
+        }
     }
 
     public class Orientation

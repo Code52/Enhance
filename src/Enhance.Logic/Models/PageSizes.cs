@@ -23,11 +23,11 @@ namespace Enhance.Logic.Models
         }
     }
 
-    public struct PageSize
+    public class PageSize
     {
-        public string Name;
-        public double Height;
-        public double Width;
+        public string Name { get; set; }
+        public double Height { get; set; }
+        public double Width { get; set; }
 
         public PageSize(string name, double height, double width)
         {

@@ -10,6 +10,11 @@ namespace Enhance.Logic.Models
         public static ColorDepth BlackAndWhite = new ColorDepth("Black and White", 4, 1);
         public static ColorDepth Greyscale = new ColorDepth("Greyscale", 2, 8);
         public static ColorDepth Color = new ColorDepth("Color", 1, 24);
+
+        public static List<ColorDepth> List
+        {
+            get { return new List<ColorDepth> { BlackAndWhite, Greyscale, Color };}
+        }
     }
 
     public class ColorDepth
