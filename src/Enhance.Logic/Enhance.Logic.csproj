@@ -44,6 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dialogs\WPFCommonDialog.cs" />
+    <Compile Include="Models\ColorDepths.cs" />
+    <Compile Include="Models\Orientations.cs" />
+    <Compile Include="Models\PageSizes.cs" />
+    <Compile Include="Models\Resolutions.cs" />
     <Compile Include="Models\Scanner.cs" />
     <Compile Include="Services\Interfaces\IScannerService.cs" />
     <Compile Include="Services\ScannerService.cs" />
