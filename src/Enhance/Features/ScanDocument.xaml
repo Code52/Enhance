@@ -50,9 +50,17 @@
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <ListView Grid.Row="0" x:Name="Scanners" ItemsSource="{Binding Scanners}" SelectedItem="{Binding SelectedScanner}"  DisplayMemberPath="Name" Margin="0, 0, 0, 5" />
-            <Button Grid.Row="1" x:Name="Scan" Content="Scan" Width="60" Command="{Binding ScanCommand}" />
+            <ListView Grid.Row="0" x:Name="Scanners" ItemsSource="{Binding Scanners}" SelectedItem="{Binding SelectedScanner}"  DisplayMemberPath="Name" Margin="0, 0, 0, 25" />
+            <ComboBox Grid.Row="1" ItemsSource="{Binding OrientationsList}" SelectedItem="{Binding Orientation}" DisplayMemberPath="Name" Foreground="White" Margin="0,0,0,5" />
+            <ComboBox Grid.Row="2" ItemsSource="{Binding ColorDepthsList}" SelectedItem="{Binding ColorDepth}" DisplayMemberPath="Name" Foreground="White" Margin="0,0,0,5" />
+            <ComboBox Grid.Row="3" ItemsSource="{Binding PageSizesList}" SelectedItem="{Binding PageSize}" DisplayMemberPath="Name" Foreground="White" Margin="0,0,0,5" />
+            <ComboBox Grid.Row="4" ItemsSource="{Binding ResolutionsList}" SelectedItem="{Binding Resolution}" DisplayMemberPath="Name" Foreground="White" Margin="0,0,0,25" />
+            <Button Grid.Row="5" x:Name="Scan" Content="Scan" Width="60" Command="{Binding ScanCommand}" />
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="1">

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -25,6 +27,16 @@ namespace Enhance.Features
             FetchScanners();
             BackHomeCommand = new DelegateCommand(NavigateBack);
             ScanCommand = new DelegateCommand(Scan);
+
+            OrientationsList = new ObservableCollection<Orientation>(Orientations.List);
+            ColorDepthsList = new ObservableCollection<ColorDepth>(ColorDepths.List);
+            PageSizesList = new ObservableCollection<PageSize>(PageSizes.List);
+            ResolutionsList = new ObservableCollection<Resolution>(Resolutions.List);
+
+            Orientation = Orientations.Portrait;
+            ColorDepth = ColorDepths.Color;
+            Resolution = Resolutions.R72;
+            PageSize = PageSizes.A5;
         }
 
         public ObservableCollection<Scanner> Scanners { get; set; }
@@ -39,6 +51,18 @@ namespace Enhance.Features
 
         public ICommand ScanCommand { get; private set; }
 
+        public Orientation Orientation { get; set; }
+        public ObservableCollection<Orientation> OrientationsList { get; set; } 
+        
+        public ColorDepth ColorDepth { get; set; }
+        public ObservableCollection<ColorDepth> ColorDepthsList { get; set; } 
+
+        public PageSize PageSize { get; set; }
+        public ObservableCollection<PageSize> PageSizesList { get; set; }
+        
+        public Resolution Resolution { get; set; }
+        public ObservableCollection<Resolution> ResolutionsList { get; set; } 
+
         private void FetchScanners()
         {
             Scanners = new ObservableCollection<Scanner>(scannerService.GetScanners());
@@ -52,8 +76,8 @@ namespace Enhance.Features
             {
                 IsProgressVisible = Visibility.Visible;
 
-                var image = scannerService.Scan(SelectedScanner.Device);
-
+                var image = scannerService.Scan(SelectedScanner.Device, PageSize, ColorDepth, Resolution, Orientation);
+              
                 Image = ConvertImageToBitmapImage(image);
 
                 IsProgressVisible = Visibility.Hidden;
@@ -66,14 +90,15 @@ namespace Enhance.Features
 
         private BitmapImage ConvertImageToBitmapImage(Image bitmap)
         {
-            var memoryStream = new MemoryStream();
-
-            bitmap.Save(memoryStream, ImageFormat.Bmp);
+            string fileName = Path.GetTempFileName();
+            File.Delete(fileName);
+            
+            bitmap.Save(fileName, ImageFormat.Bmp);
 
             var bitmapImage = new BitmapImage();
 
             bitmapImage.BeginInit();
-            bitmapImage.StreamSource = new MemoryStream(memoryStream.ToArray());
+            bitmapImage.StreamSource = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             bitmapImage.EndInit();
 
             return bitmapImage;
