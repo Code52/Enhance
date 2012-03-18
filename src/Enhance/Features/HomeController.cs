@@ -1,4 +1,6 @@
-﻿using Enhance.Logic.Services.Interfaces;
+﻿using System.Drawing;
+using Enhance.Logic.Services.Interfaces;
+using Enhance.Models;
 using Phoenix;
 using Phoenix.ActionResults;
 
@@ -21,6 +23,16 @@ namespace Enhance.Features
         public ActionResult ScanDocument()
         {
             return Page(new ScanDocumentViewModel(scannerService));
+        }
+
+        public ActionResult ManageDocuments()
+        {
+            return Page(new ManageDocumentsViewModel(null));
+        }
+
+        public ActionResult ManageDocuments(EnhanceImage image)
+        {
+            return Page(new ManageDocumentsViewModel(image));
         }
     }
 }

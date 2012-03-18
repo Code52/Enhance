@@ -36,10 +36,15 @@ namespace Enhance.Logic.Services
 
         public Image Scan(DeviceInfo device)
         {
-            return Scan(device, PageSizes.A5, ColorDepths.Color, Resolutions.R72, Orientations.Landscape);
+            return Scan(device, PageSizes.A5, ColorDepths.Color, Resolutions.R72, Orientations.Landscape, true);
         }
 
-        public Image Scan(DeviceInfo device, PageSize pageSize, ColorDepth colorDepth, Resolution resolution, Orientation orientation)
+        public Image Scan(DeviceInfo device, ColorDepth colorDepth, Resolution resolution)
+        {
+            return Scan(device, null, colorDepth, resolution, null, false);
+        }
+
+        public Image Scan(DeviceInfo device, PageSize pageSize, ColorDepth colorDepth, Resolution resolution, Orientation orientation, bool setSize = true)
         {
             if (device == null)
                 throw new ArgumentException("Device must be specified");
@@ -48,8 +53,8 @@ namespace Enhance.Logic.Services
 
             var wiaCommonDialog = new WPFCommonDialog();
             var item = scanner.Items[1];
-            
-            SetupPageSize(item, pageSize, colorDepth.Value, colorDepth.BitsPerPixel, resolution.Value, orientation.Direction);
+
+            SetupPageSize(item, pageSize, colorDepth, resolution, orientation, setSize);
 
             var image = (ImageFile)wiaCommonDialog.ShowTransfer(item, wiaFormatBMP, false);
 
@@ -62,27 +67,37 @@ namespace Enhance.Logic.Services
             return Image.FromFile(fileName);
         }
 
-        private void SetupPageSize(WIA.Item item, PageSize pageSize, int colorDepth, int bpp, int dotsPerInch, int rotation)
+        private void SetupPageSize(WIA.Item item, PageSize pageSize, ColorDepth colorDepth, Resolution resolution, Orientation orientation, bool setSize)
         {
-            if (item == null) return;
+           if (item == null)
+                return;
 
-           // item.Properties["Rotation"].set_Value(rotation);
+            item.Properties["Horizontal Resolution"].set_Value(resolution.Value);
+            item.Properties["Vertical Resolution"].set_Value(resolution.Value);
+            item.Properties["Current Intent"].set_Value(colorDepth.Value);
+            item.Properties["Bits Per Pixel"].set_Value(colorDepth.BitsPerPixel);
 
-            item.Properties["Horizontal Resolution"].set_Value(dotsPerInch);
-            item.Properties["Vertical Resolution"].set_Value(dotsPerInch);
+            double hExtent = item.Properties["Horizontal Extent"].SubTypeMax;
+            double vExtent = item.Properties["Vertical Extent"].SubTypeMax;
 
-            if (rotation == 0)
+            if (setSize)
             {
-                item.Properties["Horizontal Extent"].set_Value(dotsPerInch * pageSize.Width);
-                item.Properties["Vertical Extent"].set_Value(dotsPerInch * pageSize.Height);
+                if (orientation.Direction == 0)
+                {
+                    item.Properties["Horizontal Extent"].set_Value(resolution.Value * pageSize.Width);
+                    item.Properties["Vertical Extent"].set_Value(resolution.Value * pageSize.Height);
+                }
+                else
+                {
+                    item.Properties["Horizontal Extent"].set_Value(resolution.Value * pageSize.Height);
+                    item.Properties["Vertical Extent"].set_Value(resolution.Value * pageSize.Width);
+                }
             }
             else
             {
-                item.Properties["Horizontal Extent"].set_Value(dotsPerInch * pageSize.Height);
-                item.Properties["Vertical Extent"].set_Value(dotsPerInch * pageSize.Width);
+                item.Properties["Horizontal Extent"].set_Value(hExtent);
+                item.Properties["Vertical Extent"].set_Value(vExtent);
             }
-            item.Properties["Current Intent"].set_Value(colorDepth);
-            item.Properties["Bits Per Pixel"].set_Value(bpp);
         }
-    }
+    } 
 }

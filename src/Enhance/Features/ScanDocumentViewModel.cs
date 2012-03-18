@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Enhance.Logic.Models;
 using Enhance.Logic.Services.Interfaces;
+using Enhance.Models;
 using Phoenix;
 using Phoenix.Commands;
 
@@ -22,44 +22,40 @@ namespace Enhance.Features
         public ScanDocumentViewModel(IScannerService scannerService)
         {
             this.scannerService = scannerService;
-            IsProgressVisible = Visibility.Hidden;
 
             FetchScanners();
             BackHomeCommand = new DelegateCommand(NavigateBack);
             ScanCommand = new DelegateCommand(Scan);
+            PreviewCommand = new DelegateCommand(Preview);
+            CopyCommand = new DelegateCommand(CopyImage);
+            ManageCommand = new DelegateCommand(ManageImage);
 
-            OrientationsList = new ObservableCollection<Orientation>(Orientations.List);
+            SelectedScanner = Scanners.FirstOrDefault();
+
             ColorDepthsList = new ObservableCollection<ColorDepth>(ColorDepths.List);
-            PageSizesList = new ObservableCollection<PageSize>(PageSizes.List);
             ResolutionsList = new ObservableCollection<Resolution>(Resolutions.List);
 
-            Orientation = Orientations.Portrait;
             ColorDepth = ColorDepths.Color;
-            Resolution = Resolutions.R72;
-            PageSize = PageSizes.A5;
+            Resolution = Resolutions.R300;
         }
 
         public ObservableCollection<Scanner> Scanners { get; set; }
 
         public Scanner SelectedScanner { get; set; }
 
-        public BitmapImage Image { get; set; }
+        public EnhanceImage Image { get; set; }
 
-        public Visibility IsProgressVisible { get; set; }
 
         public ICommand BackHomeCommand { get; private set; }
 
         public ICommand ScanCommand { get; private set; }
+        public ICommand PreviewCommand { get; private set; }
+        public ICommand CopyCommand { get; private set; }
+        public ICommand ManageCommand { get; private set; }
 
-        public Orientation Orientation { get; set; }
-        public ObservableCollection<Orientation> OrientationsList { get; set; } 
-        
         public ColorDepth ColorDepth { get; set; }
         public ObservableCollection<ColorDepth> ColorDepthsList { get; set; } 
 
-        public PageSize PageSize { get; set; }
-        public ObservableCollection<PageSize> PageSizesList { get; set; }
-        
         public Resolution Resolution { get; set; }
         public ObservableCollection<Resolution> ResolutionsList { get; set; } 
 
@@ -74,13 +70,9 @@ namespace Enhance.Features
 
             try
             {
-                IsProgressVisible = Visibility.Visible;
+                var image = scannerService.Scan(SelectedScanner.Device, ColorDepth, Resolution);
 
-                var image = scannerService.Scan(SelectedScanner.Device, PageSize, ColorDepth, Resolution, Orientation);
-              
-                Image = ConvertImageToBitmapImage(image);
-
-                IsProgressVisible = Visibility.Hidden;
+                Image = new EnhanceImage { Bitmap = new Bitmap(image) };
             }
             catch (Exception ex)
             {
@@ -88,20 +80,41 @@ namespace Enhance.Features
             }
         }
 
-        private BitmapImage ConvertImageToBitmapImage(Image bitmap)
+        public void Preview()
         {
-            string fileName = Path.GetTempFileName();
-            File.Delete(fileName);
-            
-            bitmap.Save(fileName, ImageFormat.Bmp);
+            if (SelectedScanner == null) return;
 
-            var bitmapImage = new BitmapImage();
+            try
+            {
+                var image = scannerService.Scan(SelectedScanner.Device, ColorDepth, Resolutions.R50);
 
-            bitmapImage.BeginInit();
-            bitmapImage.StreamSource = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            bitmapImage.EndInit();
-
-            return bitmapImage;
+                Image = new EnhanceImage { Bitmap = new Bitmap(image) };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
+
+        private void CopyImage()
+        {
+            if (Image == null) return;
+
+            var bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+            Image.Bitmap.GetHbitmap(),
+            IntPtr.Zero,
+            Int32Rect.Empty,
+            BitmapSizeOptions.FromEmptyOptions());
+
+            Clipboard.SetImage(bs);
+        }
+
+        private void ManageImage()
+        {
+            if (Image == null) return;
+
+            Controller<HomeController>().InvokeAction(c => c.ManageDocuments(Image));
+        }
+
     }
 }

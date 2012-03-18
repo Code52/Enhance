@@ -90,6 +90,10 @@
       <DependentUpon>Index.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\IndexViewModel.cs" />
+    <Compile Include="Features\ManageDocuments.xaml.cs">
+      <DependentUpon>ManageDocuments.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\ManageDocumentsViewModel.cs" />
     <Compile Include="Features\ScanDocument.xaml.cs">
       <DependentUpon>ScanDocument.xaml</DependentUpon>
     </Compile>
@@ -98,10 +102,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\EnhanceImage.cs" />
     <Compile Include="Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>
     <Page Include="Features\Index.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Features\ManageDocuments.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,13 +158,15 @@
     <AppDesigner Include="Properties\" />
     <Resource Include="Resources\Entypo.ttf" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Enhance.Logic\Enhance.Logic.csproj">
       <Project>{9E94E49F-57CE-4304-9CB1-E243FAB2B1A3}</Project>
       <Name>Enhance.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Enhance.Storage\Enhance.Storage.csproj">
+      <Project>{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}</Project>
+      <Name>Enhance.Storage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
