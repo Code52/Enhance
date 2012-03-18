@@ -69,17 +69,16 @@ namespace Enhance.Logic.Services
 
         private void SetupPageSize(WIA.Item item, PageSize pageSize, ColorDepth colorDepth, Resolution resolution, Orientation orientation, bool setSize)
         {
-            if (item == null) return;
-
-            //Get Extents at 100 Res
-            item.Properties["Horizontal Resolution"].set_Value(100);
-            item.Properties["Vertical Resolution"].set_Value(100);
-            double horizontalExtent = item.Properties["Horizontal Extent"].get_Value() / 100;
-            double verticalExtent = item.Properties["Vertical Extent"].get_Value() / 100;
-
+           if (item == null)
+                return;
 
             item.Properties["Horizontal Resolution"].set_Value(resolution.Value);
             item.Properties["Vertical Resolution"].set_Value(resolution.Value);
+            item.Properties["Current Intent"].set_Value(colorDepth.Value);
+            item.Properties["Bits Per Pixel"].set_Value(colorDepth.BitsPerPixel);
+
+            double hExtent = item.Properties["Horizontal Extent"].SubTypeMax;
+            double vExtent = item.Properties["Vertical Extent"].SubTypeMax;
 
             if (setSize)
             {
@@ -96,13 +95,9 @@ namespace Enhance.Logic.Services
             }
             else
             {
-      
-                item.Properties["Horizontal Extent"].set_Value(resolution.Value * horizontalExtent);
-                item.Properties["Vertical Extent"].set_Value(resolution.Value * verticalExtent);
+                item.Properties["Horizontal Extent"].set_Value(hExtent);
+                item.Properties["Vertical Extent"].set_Value(vExtent);
             }
-
-            item.Properties["Current Intent"].set_Value(colorDepth.Value);
-            item.Properties["Bits Per Pixel"].set_Value(colorDepth.BitsPerPixel);
         }
-    }
+    } 
 }

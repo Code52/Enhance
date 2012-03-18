@@ -66,13 +66,23 @@
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
             
-                <Button Grid.Column="0" x:Name="Preview" Content="Preview" Width="60" Command="{Binding PreviewCommand}" />
-                <Button Grid.Column="2" x:Name="Scan" Content="Scan" Width="60" Command="{Binding ScanCommand}" />
+                <Button Grid.Column="0" Grid.Row="0" x:Name="Preview" Content="Preview" Width="60" Command="{Binding PreviewCommand}" />
+                <Button Grid.Column="2" Grid.Row="0" x:Name="Scan" Content="Scan" Width="60" Command="{Binding ScanCommand}" />
+                
+                <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" x:Name="Copy" Content="Copy to Clipboard" Command="{Binding CopyCommand}" Margin="0,15,0,0" />
+
+                <Button Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" x:Name="Manage" Content="Manage Image" Command="{Binding ManageCommand}" Margin="0,15,0,0" />
             </Grid>
         </Grid>
 
-        <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Source="{Binding Image}" Stretch="Uniform" />
+        <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Source="{Binding Image.Image}" Stretch="Uniform" />
 
     </Grid>
 </UserControl>

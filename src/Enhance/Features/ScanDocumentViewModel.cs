@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Enhance.Logic.Models;
 using Enhance.Logic.Services.Interfaces;
+using Enhance.Models;
 using Phoenix;
 using Phoenix.Commands;
 
@@ -26,6 +27,8 @@ namespace Enhance.Features
             BackHomeCommand = new DelegateCommand(NavigateBack);
             ScanCommand = new DelegateCommand(Scan);
             PreviewCommand = new DelegateCommand(Preview);
+            CopyCommand = new DelegateCommand(CopyImage);
+            ManageCommand = new DelegateCommand(ManageImage);
 
             SelectedScanner = Scanners.FirstOrDefault();
 
@@ -40,12 +43,15 @@ namespace Enhance.Features
 
         public Scanner SelectedScanner { get; set; }
 
-        public BitmapImage Image { get; set; }
+        public EnhanceImage Image { get; set; }
+
 
         public ICommand BackHomeCommand { get; private set; }
 
         public ICommand ScanCommand { get; private set; }
         public ICommand PreviewCommand { get; private set; }
+        public ICommand CopyCommand { get; private set; }
+        public ICommand ManageCommand { get; private set; }
 
         public ColorDepth ColorDepth { get; set; }
         public ObservableCollection<ColorDepth> ColorDepthsList { get; set; } 
@@ -65,8 +71,8 @@ namespace Enhance.Features
             try
             {
                 var image = scannerService.Scan(SelectedScanner.Device, ColorDepth, Resolution);
-              
-                Image = ConvertImageToBitmapImage(image);
+
+                Image = new EnhanceImage { Bitmap = new Bitmap(image) };
             }
             catch (Exception ex)
             {
@@ -82,7 +88,7 @@ namespace Enhance.Features
             {
                 var image = scannerService.Scan(SelectedScanner.Device, ColorDepth, Resolutions.R50);
 
-                Image = ConvertImageToBitmapImage(image);
+                Image = new EnhanceImage { Bitmap = new Bitmap(image) };
             }
             catch (Exception ex)
             {
@@ -90,20 +96,25 @@ namespace Enhance.Features
             }
         }
 
-        private BitmapImage ConvertImageToBitmapImage(Image bitmap)
+        private void CopyImage()
         {
-            string fileName = Path.GetTempFileName();
-            File.Delete(fileName);
-            
-            bitmap.Save(fileName, ImageFormat.Bmp);
+            if (Image == null) return;
 
-            var bitmapImage = new BitmapImage();
+            var bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+            Image.Bitmap.GetHbitmap(),
+            IntPtr.Zero,
+            Int32Rect.Empty,
+            BitmapSizeOptions.FromEmptyOptions());
 
-            bitmapImage.BeginInit();
-            bitmapImage.StreamSource = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            bitmapImage.EndInit();
-
-            return bitmapImage;
+            Clipboard.SetImage(bs);
         }
+
+        private void ManageImage()
+        {
+            if (Image == null) return;
+
+            Controller<HomeController>().InvokeAction(c => c.ManageDocuments(Image));
+        }
+
     }
 }
