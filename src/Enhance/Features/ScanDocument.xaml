@@ -18,8 +18,8 @@
     <Transitions:TransitionService.NavigateBackTransition>
         <Transitions:SlideTransition Direction="Back" />
     </Transitions:TransitionService.NavigateBackTransition>
-    
-    <Grid Margin="10, 30">
+
+    <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
             <ColumnDefinition />
@@ -33,7 +33,7 @@
                 VerticalAlignment="Top"
                 Width="50"
                 Height="50"
-                Margin="-10 0 0 0"
+                Margin="-20 -20 0 0"
                 AutomationProperties.AutomationId="BackHomeButton"
                 Style="{DynamicResource MetroCircleButtonStyle}"
                 Command="{Binding BackHomeCommand}">
@@ -46,7 +46,7 @@
             </Grid>
         </Button>
 
-        <Grid Grid.Column="0" Grid.Row="1" Margin="0, 0, 10, 0">
+        <Grid Grid.Column="0" Grid.Row="1" Margin="0, 20, 10, 0">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
@@ -55,29 +55,24 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+           
             <ListView Grid.Row="0" x:Name="Scanners" ItemsSource="{Binding Scanners}" SelectedItem="{Binding SelectedScanner}"  DisplayMemberPath="Name" Margin="0, 0, 0, 25" />
-            <ComboBox Grid.Row="1" ItemsSource="{Binding OrientationsList}" SelectedItem="{Binding Orientation}" DisplayMemberPath="Name" Foreground="White" Margin="0,0,0,5" />
             <ComboBox Grid.Row="2" ItemsSource="{Binding ColorDepthsList}" SelectedItem="{Binding ColorDepth}" DisplayMemberPath="Name" Foreground="White" Margin="0,0,0,5" />
-            <ComboBox Grid.Row="3" ItemsSource="{Binding PageSizesList}" SelectedItem="{Binding PageSize}" DisplayMemberPath="Name" Foreground="White" Margin="0,0,0,5" />
             <ComboBox Grid.Row="4" ItemsSource="{Binding ResolutionsList}" SelectedItem="{Binding Resolution}" DisplayMemberPath="Name" Foreground="White" Margin="0,0,0,25" />
-            <Button Grid.Row="5" x:Name="Scan" Content="Scan" Width="60" Command="{Binding ScanCommand}" />
+            
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+            
+                <Button Grid.Column="0" x:Name="Preview" Content="Preview" Width="60" Command="{Binding PreviewCommand}" />
+                <Button Grid.Column="2" x:Name="Scan" Content="Scan" Width="60" Command="{Binding ScanCommand}" />
+            </Grid>
         </Grid>
 
-        <Grid Grid.Column="1" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            
-            <Image Grid.Row="0" Source="{Binding Image}" Stretch="Uniform" />
-            
-            <ProgressBar Grid.Row="1"
-                         x:Name="Progress"
-                         Visibility="{Binding IsProgressVisible}"
-                         IsIndeterminate="True"
-                         IsEnabled="True"
-                         Width="300"
-                         HorizontalAlignment="Center" />
-        </Grid>
+        <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Source="{Binding Image}" Stretch="Uniform" />
+
     </Grid>
 </UserControl>

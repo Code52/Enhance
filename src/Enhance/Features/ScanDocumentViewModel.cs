@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -22,21 +21,19 @@ namespace Enhance.Features
         public ScanDocumentViewModel(IScannerService scannerService)
         {
             this.scannerService = scannerService;
-            IsProgressVisible = Visibility.Hidden;
 
             FetchScanners();
             BackHomeCommand = new DelegateCommand(NavigateBack);
             ScanCommand = new DelegateCommand(Scan);
+            PreviewCommand = new DelegateCommand(Preview);
 
-            OrientationsList = new ObservableCollection<Orientation>(Orientations.List);
+            SelectedScanner = Scanners.FirstOrDefault();
+
             ColorDepthsList = new ObservableCollection<ColorDepth>(ColorDepths.List);
-            PageSizesList = new ObservableCollection<PageSize>(PageSizes.List);
             ResolutionsList = new ObservableCollection<Resolution>(Resolutions.List);
 
-            Orientation = Orientations.Portrait;
             ColorDepth = ColorDepths.Color;
-            Resolution = Resolutions.R72;
-            PageSize = PageSizes.A5;
+            Resolution = Resolutions.R300;
         }
 
         public ObservableCollection<Scanner> Scanners { get; set; }
@@ -45,21 +42,14 @@ namespace Enhance.Features
 
         public BitmapImage Image { get; set; }
 
-        public Visibility IsProgressVisible { get; set; }
-
         public ICommand BackHomeCommand { get; private set; }
 
         public ICommand ScanCommand { get; private set; }
+        public ICommand PreviewCommand { get; private set; }
 
-        public Orientation Orientation { get; set; }
-        public ObservableCollection<Orientation> OrientationsList { get; set; } 
-        
         public ColorDepth ColorDepth { get; set; }
         public ObservableCollection<ColorDepth> ColorDepthsList { get; set; } 
 
-        public PageSize PageSize { get; set; }
-        public ObservableCollection<PageSize> PageSizesList { get; set; }
-        
         public Resolution Resolution { get; set; }
         public ObservableCollection<Resolution> ResolutionsList { get; set; } 
 
@@ -74,13 +64,25 @@ namespace Enhance.Features
 
             try
             {
-                IsProgressVisible = Visibility.Visible;
-
-                var image = scannerService.Scan(SelectedScanner.Device, PageSize, ColorDepth, Resolution, Orientation);
+                var image = scannerService.Scan(SelectedScanner.Device, ColorDepth, Resolution);
               
                 Image = ConvertImageToBitmapImage(image);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
-                IsProgressVisible = Visibility.Hidden;
+        public void Preview()
+        {
+            if (SelectedScanner == null) return;
+
+            try
+            {
+                var image = scannerService.Scan(SelectedScanner.Device, ColorDepth, Resolutions.R50);
+
+                Image = ConvertImageToBitmapImage(image);
             }
             catch (Exception ex)
             {
