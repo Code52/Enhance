@@ -16,7 +16,14 @@ namespace Enhance.Storage
 
         public static DirectoryInfo[] GetDirectories(string path)
         {
-            return new DirectoryInfo(path).GetDirectories();
+            try
+            {
+                return new DirectoryInfo(path).GetDirectories();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public static FileInfo[] GetFiles(string path)

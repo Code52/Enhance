@@ -24,13 +24,13 @@
             </Grid>
         </Controls:Tile>
 
-        <Controls:Tile Title="scan document" Grid.Row="1" Grid.Column="1" Width="175" Height="175" >
+        <Controls:Tile Title="scan document" Grid.Row="1" Grid.Column="1" Commands:Invoke.OnClick="Home.DocScanDocument" Width="175" Height="175" >
             <Grid>
                 <TextBlock Text="l" FontFamily="/Resources/#Entypo" FontSize="180" Margin="0,-35,0,0"/>
             </Grid>
-        </Controls:Tile> 
+        </Controls:Tile>
 
-        <Controls:Tile Title="manage documents" Grid.Row="1" Grid.Column="2" Width="175" Height="175" >
+        <Controls:Tile Title="manage documents" Grid.Row="1" Grid.Column="2" Commands:Invoke.OnClick="Home.ManageDocuments" Width="175" Height="175" >
             <Grid>
                 <TextBlock Text="t" FontFamily="/Resources/#Entypo" FontSize="180" Margin="0,-35,0,0"/>
             </Grid>

@@ -85,6 +85,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Features\DocScanDocument.xaml.cs">
+      <DependentUpon>DocScanDocument.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\DocScanDocumentViewModel.cs" />
     <Compile Include="Features\HomeController.cs" />
     <Compile Include="Features\Index.xaml.cs">
       <DependentUpon>Index.xaml</DependentUpon>
@@ -102,10 +106,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Directories.cs" />
     <Compile Include="Models\EnhanceImage.cs" />
     <Compile Include="Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>
+    <Page Include="Features\DocScanDocument.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Features\Index.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
