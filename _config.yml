@@ -1,0 +1,16 @@
+markdown: rdiscount
+appname: 'Enhance'
+appslogan: ', a stylish scanner for Windows'
+username: Code52
+reponame: enhance
+accent: "000000"
+darkaccent: cacaca
+description: 
+
+feature1title: 'Stylish Design'
+feature2title: 'Easy to Use'
+feature3title: 'Scanning for this Century'
+
+feature1desc: 'A metro interface for scanning on Windows, stylish and modern.'
+feature2desc: 'A focus on usability, we''ve aimed to make Enhance basic and powerful'
+feature3desc: 'Tired of old interfaces that haven''t changed since XP? This is the one for you!'
