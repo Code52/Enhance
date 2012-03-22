@@ -1,7 +1,9 @@
 using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using AForge.Imaging.Filters;
 
 namespace Enhance.Imaging
 {
@@ -38,6 +40,46 @@ namespace Enhance.Imaging
                     NativeMethods.DeleteObject(bitmapHandle);
                 }
             }
+        }
+
+        /// <summary>
+        /// Adjust the contrast of the image
+        /// </summary>
+        /// <param name="source">the bitmap source</param>
+        /// <param name="contrastValue">contrast value in the range of -127 to 127 </param>
+        public static void Contrast(this Bitmap source, Int32 contrastValue)
+        {
+            if (contrastValue < -127 || contrastValue > 127)
+                throw new ArgumentOutOfRangeException("contrastValue", "should be between -127 and 127");
+            var filter = new ContrastCorrection(contrastValue);
+            filter.ApplyInPlace(source);
+        }
+
+        /// <summary>
+        /// Adjust the brightness of the image
+        /// </summary>
+        /// <param name="source">the source bitmap</param>
+        /// <param name="brightnessValue">brightness adjustment value in the range of -255 to 255</param>
+        public static void Brightness(this Bitmap source, Int32 brightnessValue)
+        {
+            if (brightnessValue < -255 || brightnessValue > 255)
+                throw new ArgumentOutOfRangeException("brightnessValue", "should be between -255 and 255");
+            var filter = new BrightnessCorrection(brightnessValue);
+            filter.ApplyInPlace(source);
+        }
+
+        /// <summary>
+        /// Restore Colours on a faded image
+        /// </summary>
+        /// <remarks>
+        /// This a simple image enhancement technique tht attempts to restore the original 
+        /// colours of a faded image by improving the contrasts of an image
+        /// </remarks>
+        /// <param name="source">the bitmap that has faded colours</param>
+        public static void FixColours(this Bitmap source)
+        {
+            var filter = new ContrastStretch();
+            filter.ApplyInPlace(source);
         }
     }
 }
