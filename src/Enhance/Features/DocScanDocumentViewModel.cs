@@ -15,11 +15,11 @@ using Phoenix.Commands;
 
 namespace Enhance.Features
 {
-    public class ScanDocumentViewModel : ViewModelBase
+    public class DocScanDocumentViewModel : ViewModelBase
     {
         readonly IScannerService scannerService;
 
-        public ScanDocumentViewModel(IScannerService scannerService)
+        public DocScanDocumentViewModel(IScannerService scannerService)
         {
             this.scannerService = scannerService;
 
@@ -27,15 +27,12 @@ namespace Enhance.Features
             BackHomeCommand = new DelegateCommand(NavigateBack);
             ScanCommand = new DelegateCommand(Scan);
             PreviewCommand = new DelegateCommand(Preview);
-            CopyCommand = new DelegateCommand(CopyImage);
             ManageCommand = new DelegateCommand(ManageImage);
 
             SelectedScanner = Scanners.FirstOrDefault();
 
-            ColorDepthsList = new ObservableCollection<ColorDepth>(ColorDepths.List);
             ResolutionsList = new ObservableCollection<Resolution>(Resolutions.List);
 
-            ColorDepth = ColorDepths.Color;
             Resolution = Resolutions.R300;
         }
 
@@ -53,9 +50,6 @@ namespace Enhance.Features
         public ICommand CopyCommand { get; private set; }
         public ICommand ManageCommand { get; private set; }
 
-        public ColorDepth ColorDepth { get; set; }
-        public ObservableCollection<ColorDepth> ColorDepthsList { get; set; } 
-
         public Resolution Resolution { get; set; }
         public ObservableCollection<Resolution> ResolutionsList { get; set; } 
 
@@ -70,7 +64,7 @@ namespace Enhance.Features
 
             try
             {
-                var image = scannerService.Scan(SelectedScanner.Device, ColorDepth, Resolution);
+                var image = scannerService.Scan(SelectedScanner.Device, ColorDepths.BlackAndWhite, Resolution);
 
                 Image = new EnhanceImage { Bitmap = new Bitmap(image) };
             }
@@ -86,7 +80,7 @@ namespace Enhance.Features
 
             try
             {
-                var image = scannerService.Scan(SelectedScanner.Device, ColorDepth, Resolutions.R50);
+                var image = scannerService.Scan(SelectedScanner.Device, ColorDepths.BlackAndWhite, Resolutions.R50);
 
                 Image = new EnhanceImage { Bitmap = new Bitmap(image) };
             }
@@ -94,19 +88,6 @@ namespace Enhance.Features
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        private void CopyImage()
-        {
-            if (Image == null) return;
-
-            var bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-            Image.Bitmap.GetHbitmap(),
-            IntPtr.Zero,
-            Int32Rect.Empty,
-            BitmapSizeOptions.FromEmptyOptions());
-
-            Clipboard.SetImage(bs);
         }
 
         private void ManageImage()

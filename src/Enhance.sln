@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhance.Logic", "Enhance.Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhance.Imaging", "Enhance.Imaging\Enhance.Imaging.csproj", "{070B86C5-77F7-4EDD-B473-43407CE33631}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhance.Storage", "Enhance.Storage\Enhance.Storage.csproj", "{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,16 @@ Global
 		{070B86C5-77F7-4EDD-B473-43407CE33631}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{070B86C5-77F7-4EDD-B473-43407CE33631}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{070B86C5-77F7-4EDD-B473-43407CE33631}.Release|x86.ActiveCfg = Release|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DCFADBB5-AB09-45E0-B926-57DB5080E5AA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
