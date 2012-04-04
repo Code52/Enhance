@@ -16,7 +16,7 @@ namespace Enhance.Models
             
             var drives = FileSystem.GetDrives();
 
-            foreach(var drive in drives)
+            foreach(var drive in drives.Where(x=>x.DriveType != System.IO.DriveType.Network))
             {
                 Drives.Add(new Drive(drive));    
             }
