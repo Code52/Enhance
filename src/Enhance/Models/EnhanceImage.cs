@@ -22,15 +22,17 @@ namespace Enhance.Models
             if (bitmap == null) return null;
 
             string fileName = Path.GetTempFileName();
-            File.Delete(fileName);
 
             bitmap.Save(fileName, ImageFormat.Bmp);
 
             var bitmapImage = new BitmapImage();
 
             bitmapImage.BeginInit();
+            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
             bitmapImage.StreamSource = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             bitmapImage.EndInit();
+            bitmapImage.StreamSource.Close();
+            File.Delete(fileName);
 
             return bitmapImage;
         }
